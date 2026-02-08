@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DonationStatus {
+  PENDING
+  FORWARDING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id                  String   @id @default(cuid())
+  googleId            String   @unique
+  email               String   @unique
+  name                String?
+  image               String?
+  circleUserId        String?
+  circleWalletId      String?
+  circleWalletAddress String?
+  gifUrl              String?
+  voiceName           String   @default("Google US English")
+  voiceRate           Float    @default(1.0)
+  voicePitch          Float    @default(1.0)
+  minDonation         Float    @default(1.0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  donations Donation[]
+}
+
+model Donation {
+  id            String         @id @default(cuid())
+  streamerId    String
+  donorAddress  String
+  amount        Float
+  message       String?
+  sourceChain   String
+  sourceTxHash  String         @unique
+  forwardTxHash String?
+  status        DonationStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  streamer User @relation(fields: [streamerId], references: [id])
+
+  @@index([streamerId, createdAt(sort: Desc)])
+  @@index([status])
+}

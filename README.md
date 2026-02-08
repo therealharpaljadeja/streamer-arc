@@ -106,6 +106,31 @@ Streamers receive donations into Circle programmable wallets on Arc Testnet.
 **ARC domain used as CCTP destination**
 [`src/app/donate/[streamerId]/DonationForm.tsx#L162`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/app/donate/%5BstreamerId%5D/DonationForm.tsx#L162) — `ARC_DOMAIN` (26) passed as `destinationDomain` in `depositForBurnWithHook`.
 
+### Circle Programmable Wallets
+
+Each streamer gets a Circle programmable wallet on Arc Testnet during onboarding. The wallet receives bridged USDC and supports withdrawals.
+
+**Server-side Circle API wrapper**
+[`src/lib/circle.ts#L1-L134`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/lib/circle.ts#L1-L134) — `createUserToken()`, `initializeUser()` (with `blockchains: ["ARC-TESTNET"]`), `createUser()`, `listWallets()`, `getWalletBalance()`, `createTransferChallenge()`.
+
+**Client-side wallet creation hook**
+[`src/hooks/useCircleWallet.ts#L14-L92`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/hooks/useCircleWallet.ts#L14-L92) — Orchestrates the full wallet creation flow: device token → initialize → W3S SDK challenge → fetch wallets.
+
+**Device token endpoint (creates Circle user if needed)**
+[`src/app/api/circle/device-token/route.ts#L8-L33`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/app/api/circle/device-token/route.ts#L8-L33) — Creates a Circle user ID, stores it in the database, and returns `userToken` + `encryptionKey`.
+
+**Initialize user on ARC-TESTNET**
+[`src/app/api/circle/initialize/route.ts#L6-L19`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/app/api/circle/initialize/route.ts#L6-L19) — Calls `initializeUser()` which passes `blockchains: ["ARC-TESTNET"]` to Circle's API.
+
+**Wallet discovery and storage**
+[`src/app/api/circle/wallets/route.ts#L18-L31`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/app/api/circle/wallets/route.ts#L18-L31) — Filters for `blockchain === "ARC-TESTNET" && state === "LIVE"`, stores `circleWalletId` and `circleWalletAddress` in the database.
+
+**Balance check**
+[`src/app/api/balance/route.ts#L21-L26`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/app/api/balance/route.ts#L21-L26) — Fetches wallet token balances via `getWalletBalance()`, extracts the USDC amount.
+
+**Withdrawal (transfer challenge)**
+[`src/app/api/withdraw/route.ts#L33-L45`](https://github.com/therealharpaljadeja/streamer-arc/blob/main/src/app/api/withdraw/route.ts#L33-L45) — Creates a transfer challenge via `createTransferChallenge()` for sending USDC out of the programmable wallet.
+
 ### ENS
 
 Donor addresses are resolved to ENS names (when available) for display in alerts.

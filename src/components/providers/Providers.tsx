@@ -14,7 +14,7 @@ createAppKit({
   networks: [sepolia, ...networks.slice(1)] as [typeof sepolia, ...(typeof networks)],
   defaultNetwork: sepolia,
   metadata: {
-    name: "Arc Streamer Alerts",
+    name: "Streamer Arc",
     description: "Livestream donation alerts powered by Arc & Circle CCTP",
     url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     icons: [],

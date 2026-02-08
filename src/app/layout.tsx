@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Arc Streamer Alerts",
+  title: "Streamer Arc",
   description: "Livestream donation alerts powered by Arc & Circle CCTP",
 };
 

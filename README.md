@@ -1,6 +1,14 @@
 # Streamer Arc
 
-Livestream donation alerts powered by Circle CCTP and Arc Testnet. Streamers sign in with Google, get a Circle wallet on Arc Testnet, and set up a custom alert (GIF + TTS voice). Viewers donate USDC from any supported testnet chain — the tokens get bridged to Arc Testnet via Circle's CCTP Forwarding Service. An OBS-compatible overlay displays the alert with the donor's message read aloud via Web Speech API.
+Livestream donation alerts powered by Circle CCTP and Arc Testnet. Streamers sign in with Google, get a Circle wallet on Arc Testnet, and set up a custom alert (GIF + TTS voice). 
+
+Viewers donate USDC from any supported testnet chain the tokens get bridged to Arc Testnet via Circle's CCTP Forwarding Service. 
+
+An OBS-compatible overlay displays the alert with the donor's message read aloud via Web Speech API.
+
+## Example
+
+![example](/public/screenshot.jpeg)
 
 ## Getting Started
 
